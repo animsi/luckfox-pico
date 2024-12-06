@@ -841,24 +841,6 @@ function build_sysdrv() {
 }
 
 function build_kernel() {
-	#Apply patch, already done
-	# if [ ! -f ${SDK_SYSDRV_DIR}/source/.kernel_patch ]; then
-	# 	echo "============Apply Kernel Patch============"
-	# 	cd ${SDK_ROOT_DIR}
-	# 	git apply --verbose ${SDK_SYSDRV_DIR}/tools/board/kernel/*.patch
-	# 	if [ $? -eq 0 ]; then
-	# 		msg_info "Patch applied successfully."
-	# 		cp ${SDK_SYSDRV_DIR}/tools/board/kernel/*_defconfig ${KERNEL_PATH}/arch/arm/configs/
-	# 		cp ${SDK_SYSDRV_DIR}/tools/board/kernel/*.config ${KERNEL_PATH}/arch/arm/configs/
-	# 		cp ${SDK_SYSDRV_DIR}/tools/board/kernel/kernel-drivers-video-logo_linux_clut224.ppm ${KERNEL_PATH}/drivers/video/logo/logo_linux_clut224.ppm
-	# 		cp ${SDK_SYSDRV_DIR}/tools/board/kernel/*.dts ${KERNEL_PATH}/arch/arm/boot/dts
-	# 		cp ${SDK_SYSDRV_DIR}/tools/board/kernel/*.dtsi ${KERNEL_PATH}/arch/arm/boot/dts
-	# 		touch ${SDK_SYSDRV_DIR}/source/.kernel_patch
-	# 	else
-	# 		msg_error "Failed to apply the patch."
-	# 	fi
-	# fi
-
 	rm -rf ${DTS_CONFIG} ${KERNEL_DEFCONFIG}
 	check_config RK_KERNEL_DTS RK_KERNEL_DEFCONFIG || return 0
 
@@ -1329,15 +1311,6 @@ function build_clean() {
 			rm -rf ${SDK_SYSDRV_DIR}/source/uboot/u-boot/configs/*luckfox*
 			rm ${SDK_SYSDRV_DIR}/source/.uboot_patch
 		fi
-
-		# make kernel_clean -C ${SDK_SYSDRV_DIR}
-		# if [ -f ${SDK_SYSDRV_DIR}/source/.kernel_patch ]; then
-		# 	git apply -R --verbose ${SDK_SYSDRV_DIR}/tools/board/kernel/*.patch
-		# 	cp ${SDK_SYSDRV_DIR}/tools/board/kernel/logo_linux_clut224.ppm ${SDK_SYSDRV_DIR}/source/kernel/drivers/video/logo/logo_linux_clut224.ppm
-		# 	rm -rf ${SDK_SYSDRV_DIR}/source/kernel/arch/arm/configs/*luckfox*
-		# 	rm -rf ${SDK_SYSDRV_DIR}/source/kernel/arch/arm/boot/dts/*luckfox*
-		# 	rm ${SDK_SYSDRV_DIR}/source/.kernel_patch
-		# fi
 		;;
 	all)
 		make distclean -C ${SDK_SYSDRV_DIR}
