@@ -859,6 +859,7 @@ function build_kernel() {
 	# 	fi
 	# fi
 
+	rm -rf ${DTS_CONFIG} ${KERNEL_DEFCONFIG}
 	check_config RK_KERNEL_DTS RK_KERNEL_DEFCONFIG || return 0
 
 	echo "============Start building kernel============"
@@ -883,6 +884,7 @@ function build_kernel() {
 }
 
 function build_rootfs() {
+	rm -rf ${BUILDROOT_DEFCONFIG} ${BUILDROOT_CONFIG_FILE}
 	check_config RK_BOOT_MEDIUM || return 0
 
 	make rootfs -C ${SDK_SYSDRV_DIR}
@@ -2210,23 +2212,6 @@ __LINK_DEFCONFIG_FROM_BOARD_CFG() {
 	mkdir -p ${SDK_CONFIG_DIR}
 	if [[ "$LF_TARGET_ROOTFS" == "ubuntu" ]]; then
 		sudo chmod a+rw $SDK_CONFIG_DIR
-	fi
-
-	if [ ! -f ${SDK_SYSDRV_DIR}/source/.kernel_patch ]; then
-		echo "============Apply Kernel Patch============"
-		cd ${SDK_ROOT_DIR}
-		git apply ${SDK_SYSDRV_DIR}/tools/board/kernel/*.patch
-		if [ $? -eq 0 ]; then
-			msg_info "Patch applied successfully."
-			cp ${SDK_SYSDRV_DIR}/tools/board/kernel/*_defconfig ${KERNEL_PATH}/arch/arm/configs/
-			cp ${SDK_SYSDRV_DIR}/tools/board/kernel/*.config ${KERNEL_PATH}/arch/arm/configs/
-			cp ${SDK_SYSDRV_DIR}/tools/board/kernel/kernel-drivers-video-logo_linux_clut224.ppm ${KERNEL_PATH}/drivers/video/logo/logo_linux_clut224.ppm
-			cp ${SDK_SYSDRV_DIR}/tools/board/kernel/*.dts ${KERNEL_PATH}/arch/arm/boot/dts
-			cp ${SDK_SYSDRV_DIR}/tools/board/kernel/*.dtsi ${KERNEL_PATH}/arch/arm/boot/dts
-			touch ${SDK_SYSDRV_DIR}/source/.kernel_patch
-		else
-			msg_error "Failed to apply the patch."
-		fi
 	fi
 
 	if [ -n "$RK_KERNEL_DTS" ]; then
