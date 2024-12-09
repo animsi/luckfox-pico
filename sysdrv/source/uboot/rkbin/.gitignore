@@ -1,4 +1,2 @@
-!*.bin
-FlashHead.bin
-UsbHead.bin
+**.bin
 .diff*
