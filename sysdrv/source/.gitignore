@@ -1,5 +1,7 @@
 ./busybox/
-./buildroot/
+buildroot
 ./objs_kernel/
 .kernel_patch
 .uboot_patch
+kernel
+uboot
