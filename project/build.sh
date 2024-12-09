@@ -24,7 +24,7 @@ SDK_ROOT_DIR=$(realpath $COMMON_DIR/..)
 SDK_SYSDRV_DIR=${SDK_ROOT_DIR}/sysdrv
 SDK_MEDIA_DIR=${SDK_ROOT_DIR}/media
 SDK_APP_DIR=${PROJECT_TOP_DIR}/app
-BOARD_CONFIG=$SDK_ROOT_DIR/.BoardConfig.mk
+BOARD_CONFIG=$SDK_ROOT_DIR/BoardConfig.mk
 TARGET_PRODUCT_DIR=${PROJECT_TOP_DIR}/cfg
 GLOBAL_ROOT_FILESYSTEM_NAME=rootfs
 GLOBAL_OEM_NAME=oem
@@ -707,42 +707,44 @@ function build_uboot() {
 	# cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*.dts ${SDK_SYSDRV_DIR}/source/uboot/u-boot/arch/arm/dts
 	# cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*.dtsi ${SDK_SYSDRV_DIR}/source/uboot/u-boot/arch/arm/dts
 
-	local uboot_rkbin_ini tempfile target_ini_dir
+	# local uboot_rkbin_ini tempfile target_ini_dir
 	# tempfile="$SDK_SYSDRV_DIR/source/uboot/rkbin/$RK_UBOOT_RKBIN_INI_OVERLAY"
 	# if [ -f "$tempfile" ]; then
 	# 	uboot_rkbin_ini=$tempfile
 	# fi
 
-	target_ini_dir=$SDK_SYSDRV_DIR/source/uboot/rkbin/RKBOOT/
-	if [ "$RK_ENABLE_FASTBOOT" = "y" -a -n "$RK_UBOOT_RKBIN_MCU_CFG" ]; then
-		uboot_rkbin_ini=$RK_PROJECT_PATH_FASTBOOT/rk_uboot_rkbin_rkboot_overlay.ini
-		build_mcu $RK_UBOOT_RKBIN_MCU_CFG "__MCU_CONTINUE__"
-		case $RK_BOOT_MEDIUM in
-		emmc)
-			tempfile=$target_ini_dir/RV1106MINIALL_EMMC_TB.ini
-			;;
-		spi_nor)
-			tempfile=$target_ini_dir/RV1106MINIALL_SPI_NOR_TB.ini
-			;;
-		spi_nand | slc_nand)
-			tempfile=$target_ini_dir/RV1106MINIALL_SPI_NAND_TB.ini
-			;;
-		*)
-			echo "build uboot Not support storage medium type: $RK_BOOT_MEDIUM"
-			finish_build
-			exit 1
-			;;
-		esac
+	# target_ini_dir=$SDK_SYSDRV_DIR/source/uboot/rkbin/RKBOOT/
+	# if [ "$RK_ENABLE_FASTBOOT" = "y" -a -n "$RK_UBOOT_RKBIN_MCU_CFG" ]; then
+	# 	echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbc"
+	# 	uboot_rkbin_ini=$RK_PROJECT_PATH_FASTBOOT/rk_uboot_rkbin_rkboot_overlay.ini
+	# 	build_mcu $RK_UBOOT_RKBIN_MCU_CFG "__MCU_CONTINUE__"
+	# 	case $RK_BOOT_MEDIUM in
+	# 	emmc)
+	# 		tempfile=$target_ini_dir/RV1106MINIALL_EMMC_TB.ini
+	# 		;;
+	# 	spi_nor)
+	# 		tempfile=$target_ini_dir/RV1106MINIALL_SPI_NOR_TB.ini
+	# 		;;
+	# 	spi_nand | slc_nand)
+	# 		tempfile=$target_ini_dir/RV1106MINIALL_SPI_NAND_TB.ini
+	# 		;;
+	# 	*)
+	# 		echo "build uboot Not support storage medium type: $RK_BOOT_MEDIUM"
+	# 		finish_build
+	# 		exit 1
+	# 		;;
+	# 	esac
 
-		if [ -f "$RK_PROJECT_FILE_SYSDRV_MCU_BIN" ]; then
-			__modify_file $tempfile $uboot_rkbin_ini "Hpmcu=" "$RK_PROJECT_FILE_SYSDRV_MCU_BIN" "^"
-		else
-			msg_error "build mcu <$RK_UBOOT_RKBIN_MCU_CFG> failed"
-			exit 1
-		fi
-	fi
+	# 	if [ -f "$RK_PROJECT_FILE_SYSDRV_MCU_BIN" ]; then
+	# 		echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+	# 		__modify_file $tempfile $uboot_rkbin_ini "Hpmcu=" "$RK_PROJECT_FILE_SYSDRV_MCU_BIN" "^"
+	# 	else
+	# 		msg_error "build mcu <$RK_UBOOT_RKBIN_MCU_CFG> failed"
+	# 		exit 1
+	# 	fi
+	# fi
 
-	make uboot -C ${SDK_SYSDRV_DIR} UBOOT_CFG=${RK_UBOOT_DEFCONFIG} UBOOT_CFG_FRAGMENT=${RK_UBOOT_DEFCONFIG_FRAGMENT} SYSDRV_UBOOT_RKBIN_OVERLAY_INI=$uboot_rkbin_ini
+	make uboot -C ${SDK_SYSDRV_DIR} UBOOT_CFG=${RK_UBOOT_DEFCONFIG} UBOOT_CFG_FRAGMENT=${RK_UBOOT_DEFCONFIG_FRAGMENT}
 
 	finish_build
 }
@@ -2742,18 +2744,19 @@ if [ "$1" = "mcu" ]; then
 	build_mcu $2
 fi
 
-if [ ! -e "$BOARD_CONFIG" ]; then
-	if [ "$1" = "clean" ]; then
-		msg_info "The $BOARD_CONFIG is missing, and the SDK has not been built yet."
-		exit 1
-	else
-		build_select_board
-	fi
-fi
+# if [ ! -e "$BOARD_CONFIG" ]; then
+# 	if [ "$1" = "clean" ]; then
+# 		msg_info "The $BOARD_CONFIG is missing, and the SDK has not been built yet."
+# 		exit 1
+# 	else
+# 		build_select_board
+# 	fi
+# fi
 [ -L "$BOARD_CONFIG" ] && source $BOARD_CONFIG
 __LINK_DEFCONFIG_FROM_BOARD_CFG
 export RK_PROJECT_BOARD_DIR=$(dirname $(realpath $BOARD_CONFIG))
 export RK_PROJECT_TOOLCHAIN_CROSS=$RK_TOOLCHAIN_CROSS
+echo $RK_PROJECT_TOOLCHAIN_CROSS
 export PATH="${SDK_ROOT_DIR}/tools/linux/toolchain/${RK_PROJECT_TOOLCHAIN_CROSS}/bin":$PATH
 
 if [[ "$LF_TARGET_ROOTFS" = "ubuntu" ]]; then

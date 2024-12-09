@@ -443,7 +443,8 @@ prepare:
 uboot: prepare
 	@echo -e "$(C_GREEN) ==sysdrv== build uboot  $(C_NORMAL)"
 	@$(MAKE) -C $(UBOOT_DIR) $(UBOOT_CFG) $(UBOOT_CFG_FRAGMENT) || exit 1
-	pushd $(UBOOT_DIR);$(UBOOT_COMPILE_MAKE) $(UBOOT_COMPILE_MAKE_OPTS) CROSS_COMPILE=$(CROSS_COMPILE) || exit 1;popd
+	pushd $(UBOOT_DIR); $(UBOOT_COMPILE_MAKE) $(UBOOT_COMPILE_MAKE_OPTS) CROSS_COMPILE=$(CROSS_COMPILE) || exit 1;popd
+	@echo -e "$(C_YELLOW) ==sysdrv== build uboot  $(C_NORMAL)"
 	$(AT)test ! -f $(UBOOT_DIR)/uboot.img || cp -fv $(UBOOT_DIR)/uboot.img $(SYSDRV_DIR_OUT_IMAGE)
 ifeq ($(UBOOT_NAND_PAGE_SIZE),4096)
 	$(RKBIN_DIR)/tools/programmer_image_tool -i $(UBOOT_DIR)/$(DOWNLOAD_SRC_BIN) \
