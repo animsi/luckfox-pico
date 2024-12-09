@@ -689,61 +689,6 @@ function build_uboot() {
 	echo "TARGET_UBOOT_CONFIG=$RK_UBOOT_DEFCONFIG $RK_UBOOT_DEFCONFIG_FRAGMENT"
 	echo "========================================="
 
-	#Apply patch
-	# if [ ! -f ${SDK_SYSDRV_DIR}/source/.uboot_patch ]; then
-	# 	echo "============Apply Uboot Patch============"
-	# 	cd ${SDK_ROOT_DIR}
-	# 	git apply ${SDK_SYSDRV_DIR}/tools/board/uboot/*.patch
-	# 	if [ $? -eq 0 ]; then
-	# 		msg_info "Patch applied successfully."
-	# 		touch ${SDK_SYSDRV_DIR}/source/.uboot_patch
-	# 	else
-	# 		msg_error "Failed to apply the patch."
-	# 		exit 1
-	# 	fi
-	# fi
-
-	# cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*_defconfig ${SDK_SYSDRV_DIR}/source/uboot/u-boot/configs
-	# cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*.dts ${SDK_SYSDRV_DIR}/source/uboot/u-boot/arch/arm/dts
-	# cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*.dtsi ${SDK_SYSDRV_DIR}/source/uboot/u-boot/arch/arm/dts
-
-	# local uboot_rkbin_ini tempfile target_ini_dir
-	# tempfile="$SDK_SYSDRV_DIR/source/uboot/rkbin/$RK_UBOOT_RKBIN_INI_OVERLAY"
-	# if [ -f "$tempfile" ]; then
-	# 	uboot_rkbin_ini=$tempfile
-	# fi
-
-	# target_ini_dir=$SDK_SYSDRV_DIR/source/uboot/rkbin/RKBOOT/
-	# if [ "$RK_ENABLE_FASTBOOT" = "y" -a -n "$RK_UBOOT_RKBIN_MCU_CFG" ]; then
-	# 	echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbc"
-	# 	uboot_rkbin_ini=$RK_PROJECT_PATH_FASTBOOT/rk_uboot_rkbin_rkboot_overlay.ini
-	# 	build_mcu $RK_UBOOT_RKBIN_MCU_CFG "__MCU_CONTINUE__"
-	# 	case $RK_BOOT_MEDIUM in
-	# 	emmc)
-	# 		tempfile=$target_ini_dir/RV1106MINIALL_EMMC_TB.ini
-	# 		;;
-	# 	spi_nor)
-	# 		tempfile=$target_ini_dir/RV1106MINIALL_SPI_NOR_TB.ini
-	# 		;;
-	# 	spi_nand | slc_nand)
-	# 		tempfile=$target_ini_dir/RV1106MINIALL_SPI_NAND_TB.ini
-	# 		;;
-	# 	*)
-	# 		echo "build uboot Not support storage medium type: $RK_BOOT_MEDIUM"
-	# 		finish_build
-	# 		exit 1
-	# 		;;
-	# 	esac
-
-	# 	if [ -f "$RK_PROJECT_FILE_SYSDRV_MCU_BIN" ]; then
-	# 		echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-	# 		__modify_file $tempfile $uboot_rkbin_ini "Hpmcu=" "$RK_PROJECT_FILE_SYSDRV_MCU_BIN" "^"
-	# 	else
-	# 		msg_error "build mcu <$RK_UBOOT_RKBIN_MCU_CFG> failed"
-	# 		exit 1
-	# 	fi
-	# fi
-
 	make uboot -C ${SDK_SYSDRV_DIR} UBOOT_CFG=${RK_UBOOT_DEFCONFIG} UBOOT_CFG_FRAGMENT=${RK_UBOOT_DEFCONFIG_FRAGMENT}
 
 	finish_build
