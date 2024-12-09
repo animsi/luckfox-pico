@@ -21,3 +21,12 @@ RUN apt-get -q -y install git ssh make gcc gcc-multilib g++-multilib \
     libncurses5-dev pkg-config bc python-is-python3 passwd openssl \
     openssh-server openssh-client vim file cpio rsync
 RUN apt-get -q -y install curl libtool libtool-bin patchelf
+
+# Add user
+ARG USERNAME=builder
+RUN apt-get -q -y install sudo
+RUN useradd -m -s /bin/bash $USERNAME && \
+    echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+WORKDIR /home/$USERNAME
+USER $USERNAME
