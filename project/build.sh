@@ -2611,13 +2611,6 @@ function _SAVE_KERNEL_CONFIG() {
 	cp ${KERNEL_PATH}/arch/arm/boot/dts/*luckfox* ${SDK_SYSDRV_DIR}/tools/board/kernel/
 }
 
-# SAVE ALL BUILDROOT CONFIG
-function _SAVE_BUILDROOT_CONFIG() {
-	if [ -d ${BUILDROOT_PATH} ]; then
-		cp ${BUILDROOT_PATH}/configs/*luckfox* ${SDK_SYSDRV_DIR}/tools/board/buildroot
-	fi
-}
-
 function build_save() {
 	case $1 in
 	uboot)
@@ -2625,9 +2618,6 @@ function build_save() {
 		;;
 	kernel)
 		_SAVE_KERNEL_CONFIG
-		;;
-	buildroot)
-		_SAVE_BUILDROOT_CONFIG
 		;;
 	*)
 		IMAGE_PATH=$RK_PROJECT_OUTPUT_IMAGE
