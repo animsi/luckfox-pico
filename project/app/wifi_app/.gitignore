@@ -1,4 +1,5 @@
-*.o
+**.o
+**.so
 hostapd-2.6/hostapd/hostapd
 hostapd-2.6/hostapd/hostapd_cli
 install_out
