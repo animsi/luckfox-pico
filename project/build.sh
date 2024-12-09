@@ -690,28 +690,28 @@ function build_uboot() {
 	echo "========================================="
 
 	#Apply patch
-	if [ ! -f ${SDK_SYSDRV_DIR}/source/.uboot_patch ]; then
-		echo "============Apply Uboot Patch============"
-		cd ${SDK_ROOT_DIR}
-		git apply ${SDK_SYSDRV_DIR}/tools/board/uboot/*.patch
-		if [ $? -eq 0 ]; then
-			msg_info "Patch applied successfully."
-			touch ${SDK_SYSDRV_DIR}/source/.uboot_patch
-		else
-			msg_error "Failed to apply the patch."
-			exit 1
-		fi
-	fi
+	# if [ ! -f ${SDK_SYSDRV_DIR}/source/.uboot_patch ]; then
+	# 	echo "============Apply Uboot Patch============"
+	# 	cd ${SDK_ROOT_DIR}
+	# 	git apply ${SDK_SYSDRV_DIR}/tools/board/uboot/*.patch
+	# 	if [ $? -eq 0 ]; then
+	# 		msg_info "Patch applied successfully."
+	# 		touch ${SDK_SYSDRV_DIR}/source/.uboot_patch
+	# 	else
+	# 		msg_error "Failed to apply the patch."
+	# 		exit 1
+	# 	fi
+	# fi
 
-	cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*_defconfig ${SDK_SYSDRV_DIR}/source/uboot/u-boot/configs
-	cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*.dts ${SDK_SYSDRV_DIR}/source/uboot/u-boot/arch/arm/dts
-	cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*.dtsi ${SDK_SYSDRV_DIR}/source/uboot/u-boot/arch/arm/dts
+	# cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*_defconfig ${SDK_SYSDRV_DIR}/source/uboot/u-boot/configs
+	# cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*.dts ${SDK_SYSDRV_DIR}/source/uboot/u-boot/arch/arm/dts
+	# cp ${SDK_SYSDRV_DIR}/tools/board/uboot/*.dtsi ${SDK_SYSDRV_DIR}/source/uboot/u-boot/arch/arm/dts
 
 	local uboot_rkbin_ini tempfile target_ini_dir
-	tempfile="$SDK_SYSDRV_DIR/source/uboot/rkbin/$RK_UBOOT_RKBIN_INI_OVERLAY"
-	if [ -f "$tempfile" ]; then
-		uboot_rkbin_ini=$tempfile
-	fi
+	# tempfile="$SDK_SYSDRV_DIR/source/uboot/rkbin/$RK_UBOOT_RKBIN_INI_OVERLAY"
+	# if [ -f "$tempfile" ]; then
+	# 	uboot_rkbin_ini=$tempfile
+	# fi
 
 	target_ini_dir=$SDK_SYSDRV_DIR/source/uboot/rkbin/RKBOOT/
 	if [ "$RK_ENABLE_FASTBOOT" = "y" -a -n "$RK_UBOOT_RKBIN_MCU_CFG" ]; then
@@ -720,9 +720,6 @@ function build_uboot() {
 		case $RK_BOOT_MEDIUM in
 		emmc)
 			tempfile=$target_ini_dir/RV1106MINIALL_EMMC_TB.ini
-			;;
-		sd_card)
-			tempfile=$target_ini_dir/RV1106MINIALL_SDMMC_TB.ini
 			;;
 		spi_nor)
 			tempfile=$target_ini_dir/RV1106MINIALL_SPI_NOR_TB.ini
@@ -1305,12 +1302,6 @@ function build_clean() {
 	patch)
 		cd ${SDK_ROOT_DIR}
 		make uboot_clean -C ${SDK_SYSDRV_DIR}
-		if [ -f ${SDK_SYSDRV_DIR}/source/.uboot_patch ]; then
-			git apply -R --verbose ${SDK_SYSDRV_DIR}/tools/board/uboot/*.patch
-			rm -rf ${SDK_SYSDRV_DIR}/source/uboot/u-boot/arch/arm/dts/*luckfox*
-			rm -rf ${SDK_SYSDRV_DIR}/source/uboot/u-boot/configs/*luckfox*
-			rm ${SDK_SYSDRV_DIR}/source/.uboot_patch
-		fi
 		;;
 	all)
 		make distclean -C ${SDK_SYSDRV_DIR}
