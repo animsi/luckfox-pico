@@ -1225,7 +1225,6 @@ function build_clean() {
 		;;
 	rootfs)
 		make rootfs_clean -C ${SDK_SYSDRV_DIR}
-		rm -rf $RK_PROJECT_PACKAGE_ROOTFS_DIR
 		;;
 	driver)
 		make drv_clean -C ${SDK_SYSDRV_DIR}
@@ -1258,10 +1257,6 @@ function build_clean() {
 		rm -rf ${DTS_CONFIG} ${KERNEL_DEFCONFIG} ${BUILDROOT_DEFCONFIG}
 		rm -rf ${SDK_ROOT_DIR}/output ${SDK_ROOT_DIR}/config
 		rm -rf ${SDK_ROOT_DIR}/sysdrv/source/kernel/out
-		# rm -rf ${BOARD_CONFIG}
-		if [ -d ${SDK_SYSDRV_DIR}/source/buildroot ] && [ "$LF_TARGET_ROOTFS" = "buildroot" ]; then
-			rm -rf ${SDK_SYSDRV_DIR}/source/buildroot
-		fi
 		if [ -d ${SDK_SYSDRV_DIR}/source/busybox ]; then
 			rm -rf ${SDK_SYSDRV_DIR}/source/busybox
 		fi
